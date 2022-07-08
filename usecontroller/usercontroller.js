@@ -29,7 +29,7 @@ module.exports = {
         }
     },
     getSingleuser : async (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         try {
             const user = await usercontroller.findById(req.params.id)
             if(user){
@@ -42,19 +42,44 @@ module.exports = {
         }  
         },
     updateuser : async (req, res) => {
-        const user = new usercontroller({
+        const data = new usercontroller({
+            _id : req.body._id,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             place : req.body.place,
             phone : req.body.phone,
         })
         try{
-            const user = await usercontroller.findByIdAndUpdate(req.params.id,req.body)
+            const user = await usercontroller.updateOne({_id: req.params.id} ,data)
             if(user){
                 res.status(200).json({ message: "update" ,data : user })
+            }else{
+                res.status(400).json({ message: " not update"  })
+    
             }
         }catch(err){
-            res.status(400).json({ message: " not update"  })
+            res.status(400).json({ message: " error"  })
         }
+    },
+    deleteuser : async (req, res) => {
+        const data = new usercontroller({
+            _id : req.body._id,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            place : req.body.place,
+            phone : req.body.phone,
+        })
+        try{
+            const user = await usercontroller.deleteOne({_id: req.params.id} ,data)
+            if(user){
+                res.status(200).json({ message: "deleted"  })
+            }else{
+                res.status(400).json({ message: " not deleted"  })
+    
+            }
+        }catch(err){
+            res.status(400).json({ message: " error"  })
+        }
+        
     }
 }
